@@ -1,0 +1,3 @@
+OSlogfile /var/log/auth.log
+fromdate 2015/04/01_12:39:16
+outputSeparator ,
