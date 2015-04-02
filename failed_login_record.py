@@ -37,6 +37,7 @@ class failed_login_record:
 
 def localize_records(l_records):
 	geo_ip_cache = dict()	#key: string with IP,	value: tuple (country, lat, lon)
+	bad_records = []
 	for record in l_records:
 		if record.ip not in geo_ip_cache:
 			try:
@@ -44,8 +45,10 @@ def localize_records(l_records):
 				geo_ip_cache[record.ip] = (record.country, record.latitude, record.longitude)
 			except requests.exceptions.HTTPError:
 				print "DEBUG: record not inserted = " + record.to_string(",")
+				bad_records.append(record)
 		else:
 			record.country = geo_ip_cache[record.ip][0]
 			record.latitude = geo_ip_cache[record.ip][1]
 			record.longitude = geo_ip_cache[record.ip][2]
-		#print record.country
+	
+	l_records[:] = [record for record in l_records if record not in bad_records]

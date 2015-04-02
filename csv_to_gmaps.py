@@ -43,7 +43,11 @@ def main():
 	with open(input) as inputFile:
 		for line in inputFile:
 			attr = line.split(delimiter)
-			lalo = attr[3] + "," + attr[4]
+			try:
+				lalo = attr[3] + "," + attr[4]
+			except:
+				print line
+				raise
 			if lalo in aggregatedData:
 				aggregatedData[lalo] += 1
 			else:
@@ -67,8 +71,7 @@ def main():
 	print "done"
 
 
-htmlstart = """
-<!DOCTYPE html>
+htmlstart = """<!DOCTYPE html>
 <html> 
 <head> 
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" /> 
@@ -106,8 +109,8 @@ htmltail =""" ];
     };
 
     var map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 10,
-      //center: new google.maps.LatLng(39.90218,116.40053),
+      zoom: 3,
+      center: new google.maps.LatLng(0,0),
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       mapTypeControl: false,
       streetViewControl: false,
