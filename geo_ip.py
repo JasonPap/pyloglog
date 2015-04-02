@@ -21,7 +21,12 @@ def get_geolocation_for_ip(ip):
 	url = '{}/{}'.format(FREEGEOPIP_URL, ip)
 
 	response = requests.get(url)
-	response.raise_for_status()
+	try:
+		response.raise_for_status()
+	except requests.exceptions.HTTPError:
+		print "ERROR: url=" + str(url)
+		print response.status_code
+		raise
 	if response.status_code != requests.codes.ok:
 		sys.stderr.write("free geo-ip 10k requests/hour limit reached\n")
 	return response.json()

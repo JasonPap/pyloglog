@@ -39,8 +39,11 @@ def localize_records(l_records):
 	geo_ip_cache = dict()	#key: string with IP,	value: tuple (country, lat, lon)
 	for record in l_records:
 		if record.ip not in geo_ip_cache:
-			record.geo_locate()
-			geo_ip_cache[record.ip] = (record.country, record.latitude, record.longitude)
+			try:
+				record.geo_locate()
+				geo_ip_cache[record.ip] = (record.country, record.latitude, record.longitude)
+			except requests.exceptions.HTTPError:
+				print "DEBUG: record not inserted = " + record.to_string(",")
 		else:
 			record.country = geo_ip_cache[record.ip][0]
 			record.latitude = geo_ip_cache[record.ip][1]
