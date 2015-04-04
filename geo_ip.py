@@ -29,4 +29,12 @@ def get_geolocation_for_ip(ip):
 		raise
 	if response.status_code != requests.codes.ok:
 		sys.stderr.write("free geo-ip 10k requests/hour limit reached\n")
-	return response.json()
+	
+	jsondict = dict()
+	try:
+		jsondict = response.json()
+	except ValueError:
+		print "ERROR: url=" + str(url)
+		print response.status_code
+		raise
+	return jsondict
